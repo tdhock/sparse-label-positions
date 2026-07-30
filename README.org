@@ -1,0 +1,14 @@
+The goal of this repo is to study a more efficient algorithm for a label position QP solver.
+
+** 30 July 2026
+
+[[file:figure-sim.R]] makes
+
+[[file:figure-sim.png]]
+
+We infer optimal label positions using an iterative algorithm.
+Dots represent targets, boxes represent labels.
+Each iteration first activates constraints, then computes clusters, and updated positions for each cluster.
+The algorithm stops when the update does not move the label positions.
+Each iteration is linear time and space in the number of labels.
+Above we see the algorithm only needs three iterations for 10 labels.
