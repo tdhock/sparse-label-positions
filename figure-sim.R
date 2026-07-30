@@ -53,6 +53,20 @@ while(!done){
 }
 (iteration.dt <- rbindlist(iteration.dt.list))
 
+n.clust <- max(it.dt$cluster)
+Zmat <- matrix(0, nrow(it.dt), n.clust)
+Zmat[it.dt[, cbind(1:.N, cluster)]] <- 1
+iact <- which(it.dt$active)
+Amat <- matrix(0, length(iact), nrow(it.dt))
+Amat[cbind(seq_along(iact), iact)] <- -1
+Amat[cbind(seq_along(iact), iact-1)] <- 1
+Amat %*% Zmat # should be zero
+dvec <- it.dt$current-target
+t(Zmat) %*% dvec # gradient, should be close to zero
+fit <- lm.fit(t(Amat), -dvec)
+fit$coefficients # should be all positive
+t(Amat) %*% fit$coefficients + dvec # should be near zero
+
 gg <- ggplot()+
   geom_point(aes(
     iteration, target),
