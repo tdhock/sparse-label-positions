@@ -12,3 +12,18 @@ Each iteration first activates constraints, then computes clusters, and updated 
 The algorithm stops when the update does not move the label positions.
 Each iteration is linear time and space in the number of labels.
 Above we see the algorithm only needs three iterations for 10 labels.
+
+[[file:figure-atime-directlabels-data.R]] makes [[file:figure-atime-directlabels-data.rds]]
+
+[[file:figure-atime-directlabels.R]] makes
+
+[[file:figure-atime-directlabels.png]]
+
+[[file:figure-atime-directlabels-ref.png]]
+
+[[file:figure-atime-directlabels-pred.png]]
+
+Asypmtotically, we can see that proposed time and memory are
+quasi-linear (N log N), whereas previous is cubic time and quadratic
+memory. However, there are rarely more than N=10 or 20 labels, so the
+previous code is definitely fast enough for practical N values.
