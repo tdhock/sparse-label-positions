@@ -1,17 +1,34 @@
 The goal of this repo is to study a more efficient algorithm for a label position QP solver.
 
+** 31 July 2026
+
+[[file:figure-atime-cases-data.R]] makes [[file:figure-atime-cases-data.rds]]
+
+[[file:figure-atime-cases.R]] makes
+
+[[file:figure-atime-cases.png]]
+
+[[file:figure-atime-cases-ref.png]]
+
+[[file:figure-atime-cases-pred.png]]
+
+[[file:figure-atime-worst-data.R]] makes [[file:figure-atime-worst-data.rds]]
+
+[[file:figure-atime-worst.R]] makes
+
+[[file:figure-atime-worst.png]]
+
+[[file:figure-atime-worst-ref.png]]
+
+[[file:figure-atime-worst-pred.png]]
+
+Above we see that iterations is linear, but seconds is log-linear (should be quadratic? maybe N is too small?)
+
+[[file:figure-worst-case.R]] makes
+
+[[file:figure-worst-case.png]]
+
 ** 30 July 2026
-
-[[file:figure-sim.R]] makes
-
-[[file:figure-sim.png]]
-
-We infer optimal label positions using an iterative algorithm.
-Dots represent targets, boxes represent labels.
-Each iteration first activates constraints, then computes clusters, and updated positions for each cluster.
-The algorithm stops when the update does not move the label positions.
-Each iteration is linear time and space in the number of labels.
-Above we see the algorithm only needs three iterations for 10 labels.
 
 [[file:figure-atime-directlabels-data.R]] makes [[file:figure-atime-directlabels-data.rds]]
 
@@ -27,3 +44,15 @@ Asypmtotically, we can see that proposed time and memory are
 quasi-linear (N log N), whereas previous is cubic time and quadratic
 memory. However, there are rarely more than N=10 or 20 labels, so the
 previous code is definitely fast enough for practical N values.
+
+[[file:figure-sim.R]] makes
+
+[[file:figure-sim.png]]
+
+We infer optimal label positions using an iterative algorithm.
+Dots represent targets, boxes represent labels.
+Each iteration first activates constraints, then computes clusters, and updated positions for each cluster.
+The algorithm stops when the update does not move the label positions.
+Each iteration is linear time and space in the number of labels.
+Above we see the algorithm only needs three iterations for 10 labels.
+

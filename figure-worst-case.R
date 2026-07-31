@@ -1,9 +1,13 @@
 half.size <- 5
-N.More <- 5
-(target <- c(9, 11, 11+10.1*seq(1, N.More)))
+size <- half.size*2
+m <- 11
+initial <- c(9, m)
+N <- 10
+N.More <- N-length(initial)
+(target <- c(initial, m+(size+N^-2)*seq(1, N.More)))
 library(data.table)
 library(ggplot2)
-thresh <- 0.001
+thresh <- 1e-10
 get_update <- function(target, current, half.size)data.table(
   target, current, half.size
 )[
