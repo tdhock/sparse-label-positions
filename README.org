@@ -2,27 +2,32 @@ The goal of this repo is to study a more efficient algorithm for a label positio
 
 ** Related work
 
-| lang | code    | fun                     | updates    | time | weights | bounds |
-|------+---------+-------------------------+------------+------+---------+--------|
-| R    | C       | isoreg()                |            |      | no      | no     |
-| R    | C       | monreg::monreg()        | 2006–2020  |      |         |        |
-| R    | C       | fdrtool::monoreg()      | 2006–2021  |      |         |        |
-| R    | R       | cir::pava()             | 2008–2024  |      |         |        |
-| R    | Fortran | Iso::pava()             | 2008–2020  |      | yes     | no     |
-| R    | R       | clue::pava()            | 2004–2026  |      |         |        |
-| R    | R       | logcondens::isoMeans()  | 2006–2023  |      |         |        |
-| R    | R       | sandwich::pava.blocks() | 2004–2026  |      |         |        |
-| R    | C       | intcox::intcox.pavaC()  | 2006–2013* |      |         |        |
-| R    | R       | SAGx::pava.fdr()        | 2005–2006* |      |         |        |
-| R    | R       | smacof::pavasmacof()    | 2008–2024  |      |         |        |
-| R    | R       | isotone::gpava()        | 2009–2023  |      | yes     |        |
-| R    | Fortran | quadprog::solve.QP()    | 1999–2019  | N^3  | yes     | yes    |
+| lang   | code    | fun                     | updates    | time | weights | bounds |
+|--------+---------+-------------------------+------------+------+---------+--------|
+| R      | C       | isoreg()                |            |      | no      | no     |
+| R      | C       | monreg::monreg()        | 2006–2020  |      |         |        |
+| R      | C       | fdrtool::monoreg()      | 2006–2021  |      |         |        |
+| R      | R       | cir::pava()             | 2008–2024  |      |         |        |
+| R      | Fortran | Iso::pava()             | 2008–2020  |      | yes     | no     |
+| R      | R       | clue::pava()            | 2004–2026  |      |         |        |
+| R      | R       | logcondens::isoMeans()  | 2006–2023  |      |         |        |
+| R      | R       | sandwich::pava.blocks() | 2004–2026  |      |         |        |
+| R      | C       | intcox::intcox.pavaC()  | 2006–2013* |      |         |        |
+| R      | R       | SAGx::pava.fdr()        | 2005–2006* |      |         |        |
+| R      | R       | smacof::pavasmacof()    | 2008–2024  |      |         |        |
+| R      | R       | isotone::gpava()        | 2009–2023  |      | yes     |        |
+| R      | Fortran | quadprog::solve.QP()    | 1999–2019  | N^3  | yes     | yes    |
+| Python |         | [[https://scikit-learn.org/stable/modules/generated/sklearn.isotonic.IsotonicRegression.html][IsotonicRegression]]      |            |      |         |        |
 
 Table above adapted from
 https://cran.r-project.org/web/packages/isotone/vignettes/isotone.pdf
 which discusses PAVA but does not discuss dynamic programming. (no big O notation)
 
 TODO estimate empirical complexity with atime.
+
+- https://www.sciencedirect.com/science/article/pii/S0305048321001250
+- https://arxiv.org/html/2607.12629v1#bib.bib11
+- https://www.inf.fu-berlin.de/lehre/WS12/HA/isotonicregression.pdf
 
 ** 31 July 2026
 
