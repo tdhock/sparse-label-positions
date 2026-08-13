@@ -33,6 +33,11 @@ TODO estimate empirical complexity with atime.
 - https://arxiv.org/html/2607.12629v1#bib.bib11
 - https://www.inf.fu-berlin.de/lehre/WS12/HA/isotonicregression.pdf
 
+
+** 12 Aug 2026
+
+Typed the PAVA change of variables method for label position optimization, [[file:pava-labels.tex][tex]], [[file:pava-labels.pdf][pdf]].
+
 ** 31 July 2026
 
 [[file:figure-atime-cases-data.R]] makes [[file:figure-atime-cases-data.rds]]
