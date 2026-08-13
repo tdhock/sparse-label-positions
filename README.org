@@ -34,6 +34,10 @@ TODO estimate empirical complexity with atime.
 - https://www.inf.fu-berlin.de/lehre/WS12/HA/isotonicregression.pdf
 
 
+** 13 Aug 2026
+
+Typed the dynamic programming algorithm for isotonic regression, [[file:isotonic-dp.tex][tex]], [[file:isotonic-dp.pdf][pdf]].
+
 ** 12 Aug 2026
 
 Typed the PAVA change of variables method for label position optimization, [[file:pava-labels.tex][tex]], [[file:pava-labels.pdf][pdf]].
