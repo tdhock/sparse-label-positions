@@ -44,12 +44,103 @@ The idea is to use dynamic programming to recursively compute cost functions,
 \begin{eqnarray}
     \label{eq:Cn_mu}
   C_n(x_n) &= & \min_{x_1,\, \dots,\, x_{n-1}}  \sum_{i=1}^n w_i(x_i-y_i)^2 \text{ subject to } \forall i\in\{2, \dots, n\},\, x_{i-1} \leq x_{i}.\\
-  &=& w_n(x_n-y_n)^2 + \min_{x_{n-1}} C_{n-1}(x_{n-1}) \text{ subject to } x_{n-1}\leq x_n.
+           &=& w_n(x_n-y_n)^2 + \min_{x_{n-1}} C_{n-1}(x_{n-1}) \text{ subject to } x_{n-1}\leq x_n.\\
+  &=& w_n(x_n-y_n)^2 + C_{n-1}^\leq(x_{n}),
 \end{eqnarray}
+where $C_{n-1}^\leq : \mathbb R \rightarrow \mathbb R$ is a function that we call the min-less operator of the optimal cost function up to $n-1$.
+Dynamic programming means that we have a simple update rule for computing the optimal cost up to $n$ data points, using the optimal cost up to $n-1$ data points.
+Functional representation means that the equations above use optimal cost functions rather than values.
 
-Algorithm~\ref{alg:iso-dp} summarizes the solution method for the simple case without weights ($w_i=1$ for all $i$).
+\subsection{Functional representation}
+
 Whereas previous functional dynamic programming algorithms have used either a linked list or binary tree data structure, the proposed algorithm uses arrays, which is a much simpler design that is only possible because of the problem structure.
 $C_i(x)$ is a convex function, defined in terms of pieces, each piece corresponding to a cluster of data with the same mean, and the min is always on the last piece (TODO examples and proof).
+
+For each iteration of dynamic programming $i\in\{1,\dots,n-1\}$, we therefore represent $C_{i+1}$ as a function with $K_i\in\{1,\dots,i+1\}$ pieces.
+Let $M_{i,0}=-\infty < M_{i,1} < \cdots < M_{i, K_i} < M_{i, K_i+1}=\infty$ be bounds on the function pieces, which will be computed during the dynamic programming algorithm.
+In the simple case with no weights, $w_i=1$, we have
+\begin{eqnarray}
+  \label{eq:update}
+  C_{i+1}(x) &=& (x-y_{i+1})^2 + C_i^\leq(x) \\
+  &=&
+      \begin{cases}
+        f_{i,1}(x) &\text{ if } x\in(-\infty=M_{i,0},\, M_{i,1}],\\
+         &\vdots\\
+        f_{i,K_i+1}(x) &\text{ if } x\in[M_{i,K_i},\, M_{i,K_i+1}=\infty).
+      \end{cases}
+\end{eqnarray}
+For each piece $k\in\{1,\dots,K_i+1\}$, there is a corresponding convex quadratic function
+\begin{equation}
+  \label{eq:fik}
+  f_{i,k}(x) = x^2\hat N_{i,k}  -2 x\hat T_{i,k}  + \hat c_{i,k},
+\end{equation}
+with derivative
+\begin{equation}
+  \label{eq:fik_deriv}
+  f'_{i,k}(x) = 2x\hat N_{i,k}  -2\hat T_{i,k} = 0 \Rightarrow x=\hat T_{i,k}/\hat N_{i,k},
+\end{equation}
+where $\hat N_{i,k}, \hat T_{i,k}$ are coefficients that can be efficiently computed during the algorithm, if necessary.
+
+
+\subsection{Details of dynamic programming update rules}
+
+For each iteration $i\in\{1, \dots, n-1\}$, the dynamic programming stores the current size $K_i\in\{1,\dots,i+1\}$, and arrays $N_{i,k},T_{i,k},M_{i,k}$, for $k\in\{1,\dots,K_i\}$.
+The initialization is $K_1=1,\, N_{1,1}=1,\, T_{1,1}=y_1,\, M_{1,1}=y_1$, which is a representation of $C_1^\leq$.
+For each iteration $i\in\{1, \dots, n-1\}$, the dynamic programming recursively computes $C_{i+1}^\leq$, the next min-less function, via
+\begin{equation}
+  \label{eq:Kip1}
+  K_{i+1} = \max\{
+  k\in\{K_i+1,\dots,1\}
+  \mid
+  f'_{i,k}( M_{i,k-1} ) < 0
+  \Rightarrow
+  \hat T_{i,k}/\hat N_{i,k} > M_{i,k-1}
+  \}.
+\end{equation}
+The condition $  f'_{i,k}( M_{i,k-1} ) < 0$ checks to see if the minimum occurs in the interval $(M_{i,k-1},M_{i,k})$.
+The max starts by checking $k=K_i+1$, then decrements $k$ if the condition is not satisfied. 
+
+The coefficients of $f_{i,k}$ are computed via a cumulative sum (starting at $k=K_i+1$ and going down),
+\begin{eqnarray}
+  \label{eq:cum}
+  \hat N_{i, k} &=& 
+  \begin{cases}
+    1 & \text{ if } k=K_i+1.\\
+    \hat N_{i, k+1} + N_{i,k} = 1+\sum_{j=k}^{K_i} N_{i,j} & \text{ if } k\in\{K_i,\dots,1\}.
+  \end{cases}\\
+  \hat T_{i, k} &=& 
+  \begin{cases}
+    y_{i+1} & \text{ if } k=K_i+1.\\
+    \hat T_{i, k+1} + T_{i,k} = y_{i+1}+\sum_{j=k}^{K_i} T_{i,j} & \text{ if } k\in\{K_i,\dots,1\}.
+  \end{cases}
+\end{eqnarray}
+At step $i+1$, the new array values are
+\begin{eqnarray}
+  \label{eq:Nip1}
+  N_{i+1, k} &=& 
+  \begin{cases}
+    N_{i,k} & \text{ for } k\in\{1,\dots,K_{i+1}-1\},\\
+    \hat N_{i,K_{i+1}} & \text{ for } k=K_{i+1}.
+  \end{cases}  \\
+  \label{eq:Tip1}
+  T_{i+1, k} &=& 
+  \begin{cases}
+    T_{i,k} & \text{ for } k\in\{1,\dots,K_{i+1}-1\},\\
+    \hat T_{i,K_{i+1}} & \text{ for } k=K_{i+1}.
+  \end{cases}  \\
+  \label{eq:Mip1}
+  M_{i+1, k} &=& 
+  \begin{cases}
+    M_{i,k} & \text{ for } k\in\{1,\dots,K_{i+1}-1\},\\
+    \hat T_{i,K_{i+1}}/\hat N_{i,K_{i+1}} & \text{ for } k=K_{i+1}.
+  \end{cases}  
+\end{eqnarray}
+Note that values for all $k$ except the largest ($k=K_{i+1}$) are the same between iterations $i$ and $i+1$.
+We therefore can avoid allocating new arrays, and simply write the new values in position $K_{i+1}$ of the existing arrays.
+
+\subsection{Pseudocode}
+
+Algorithm~\ref{alg:iso-dp} summarizes the solution method for the simple case without weights ($w_i=1$ for all $i$).
 
 \begin{algorithm}
 \begin{algorithmic}
@@ -58,7 +149,7 @@ $C_i(x)$ is a convex function, defined in terms of pieces, each piece correspond
   \State Initialize $K\gets 1$, $N_1\gets 1$, $T_1\gets y_1$, $M_1=y_1$.
   \For{$i=2$ to $n$}
     \State $\texttt{samples} \gets 1$, $\texttt{total} \gets y_i$.
-    \While{$K>0$ and $\texttt{total}/\texttt{samples}< M_K$}
+    \While{$K>0$ and $\texttt{total}/\texttt{samples}\leq M_K$}
       \State $\texttt{samples } += N_K$, $\texttt{total } += T_K$, $K--$.
     \EndWhile
     \State $K++$, $N_K\gets\texttt{samples}$, $T_K\gets\texttt{total}$, $M_K\gets\texttt{total}/\texttt{samples}$.
