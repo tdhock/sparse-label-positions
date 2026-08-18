@@ -56,7 +56,7 @@ Functional representation means that the equations above use optimal cost functi
 Whereas previous functional dynamic programming algorithms have used either a linked list or binary tree data structure, the proposed algorithm uses arrays, which is a much simpler design that is only possible because of the problem structure.
 $C_i(x)$ is a convex function, defined in terms of pieces, each piece corresponding to a cluster of data with the same mean, and the min is always on the last piece (TODO examples and proof).
 
-For each iteration of dynamic programming $i\in\{1,\dots,n-1\}$, we therefore represent $C_{i+1}$ as a function with $K_i\in\{1,\dots,i+1\}$ pieces.
+For each iteration of dynamic programming $i\in\{1,\dots,n-1\}$, we therefore represent $C_{i+1}$ as a function with $K_i+1\in\{1,\dots,i+1\}$ pieces.
 Let $M_{i,0}=-\infty < M_{i,1} < \cdots < M_{i, K_i} < M_{i, K_i+1}=\infty$ be bounds on the function pieces, which will be computed during the dynamic programming algorithm.
 In the simple case with no weights, $w_i=1$, we have
 \begin{eqnarray}
