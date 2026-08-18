@@ -84,8 +84,10 @@ where $\hat N_{i,k}, \hat T_{i,k}$ are coefficients that can be efficiently comp
 
 \subsection{Details of dynamic programming update rules}
 
-For each iteration $i\in\{1, \dots, n-1\}$, the dynamic programming stores the current size $K_i\in\{1,\dots,i+1\}$, and arrays $N_{i,k},T_{i,k},M_{i,k}$, for $k\in\{1,\dots,K_i\}$.
+For each iteration $i\in\{1, \dots, n\}$, the dynamic programming stores the current size $K_i\in\{1,\dots,i\}$, and arrays $N_{i,k},T_{i,k},M_{i,k}$, for $k\in\{1,\dots,K_i\}$.
+
 The initialization is $K_1=1,\, N_{1,1}=1,\, T_{1,1}=y_1,\, M_{1,1}=y_1$, which is a representation of $C_1^\leq$.
+
 For each iteration $i\in\{1, \dots, n-1\}$, the dynamic programming recursively computes $C_{i+1}^\leq$, the next min-less function, via
 \begin{equation}
   \label{eq:Kip1}
