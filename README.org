@@ -4,7 +4,7 @@ The goal of this repo is to study a more efficient algorithm for a label positio
 
 | lang   | code    | fun                        | updates    | space | time | weights | bounds |
 |--------+---------+----------------------------+------------+-------+------+---------+--------|
-| R      | C       | isoreg()                   | 2003–2024  | N     | N^2  | no      | no     |
+| R      | C       | isoreg()                   | [[https://github.com/r-devel/r-svn/commits/e0a0729f02927b7f479898db1dbf89f13e3aecba/src/library/stats/src/isoreg.c][2003–2024]]  | N     | N^2  | no      | no     |
 | R      | C       | monreg::monreg()           | 2006–2020  |       |      |         |        |
 | R      | C       | fdrtool::monoreg()         | 2006–2021  |       |      |         |        |
 | R      | R       | cir::pava()                | 2008–2024  |       |      |         |        |
@@ -20,6 +20,8 @@ The goal of this repo is to study a more efficient algorithm for a label positio
 | Python | Python  | [[https://scikit-learn.org/stable/modules/generated/sklearn.isotonic.IsotonicRegression.html][sklearn IsotonicRegression]] |            |       | N?   | yes     | yes    |
 | Python | C       | [[https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.isotonic_regression.html][scipy isotonic_regression]]  |            |       | N    | yes     | no     |
 | R      | C       | monotone::monotone()       |            |       | N    | yes     |        |
+
+Most dates above come from [[https://tdhock.github.io/blog/2026/cran-dates/][this blog]].
 
 Table above adapted from
 https://cran.r-project.org/web/packages/isotone/vignettes/isotone.pdf
