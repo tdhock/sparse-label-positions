@@ -58,11 +58,12 @@ Whereas previous functional dynamic programming algorithms have used either a li
 We will show that $C_i(x)$ is a convex function, defined in terms of pieces, each piece corresponding to a cluster of data with the same mean, and the min is always on the last piece (TODO examples and proof).
 
 Each iteration $i\in\{1,\dots,n-1\}$ of dynamic programming computes $F_{i+1}$, a cost function with $K_i+1\in\{1,\dots,i+1\}$ pieces.
-Let $M_{i,0}=-\infty < M_{i,1} < \cdots < M_{i, K_i} < M_{i, K_i+1}=\infty$ be bounds on the function pieces, which will be computed during the dynamic programming algorithm.
-In the simple case with no weights, $w_i=1$, we have
+Let $M_{i,0}=-\infty < M_{i,1} < \cdots < M_{i, K_i} < M_{i, K_i+1}=\infty$ be bounds on the function pieces, at iteration $i$ of the dynamic programming algorithm.
+Let $f_{i,k}$ be the quadratic function piece $k$ at iteration $i$.
+Then we have
 \begin{eqnarray}
   \label{eq:update}
-  F_{i+1}(x) &=& (x-y_{i+1})^2 + C_i^\leq(x) \\
+  F_{i+1}(x) &=& (x-y_{i+1})^2 + F_i^\leq(x) \\
   &=&
       \begin{cases}
         f_{i,1}(x) &\text{ if } x\in(-\infty=M_{i,0},\, M_{i,1}],\\
@@ -70,24 +71,26 @@ In the simple case with no weights, $w_i=1$, we have
         f_{i,K_i+1}(x) &\text{ if } x\in[M_{i,K_i},\, M_{i,K_i+1}=\infty).
       \end{cases}
 \end{eqnarray}
-For each piece $k\in\{1,\dots,K_i+1\}$, there is a corresponding convex quadratic function
+For each piece $k\in\{1,\dots,K_i+1\}$, there is a corresponding convex quadratic function.
+Let $\hat N_{i,k}$ be the number of data at iteration $i$ in piece $k$, and let $\hat T_{i,k}$ be the total data values at iteration $i$ in piece $k$.
+Then we have
 \begin{equation}
   \label{eq:fik}
   f_{i,k}(x) = x^2\hat N_{i,k}  -2 x\hat T_{i,k}  + \hat c_{i,k},
 \end{equation}
-with derivative
+where $\hat N_{i,k}, \hat T_{i,k}$ are coefficients that can be efficiently computed during the algorithm, if necessary.
+It is not necessary to store/compute $\hat c_{i,k}$, because it does not appear in the derivative,
 \begin{equation}
   \label{eq:fik_deriv}
-  f'_{i,k}(x) = 2x\hat N_{i,k}  -2\hat T_{i,k} = 0 \Rightarrow x=\hat T_{i,k}/\hat N_{i,k},
+  f'_{i,k}(x) = 2x\hat N_{i,k}  -2\hat T_{i,k} = 0 \Rightarrow x=\hat T_{i,k}/\hat N_{i,k}.
 \end{equation}
-where $\hat N_{i,k}, \hat T_{i,k}$ are coefficients that can be efficiently computed during the algorithm, if necessary.
-
 
 \subsection{Details of dynamic programming update rules}
 
-For each iteration $i\in\{1, \dots, n\}$, the dynamic programming stores the current size $K_i\in\{1,\dots,i\}$, and arrays $N_{i,k},T_{i,k},M_{i,k}$, for $k\in\{1,\dots,K_i\}$.
+For each iteration $i\in\{1, \dots, n\}$, the dynamic programming stores the current number of clusters $K_i\in\{1,\dots,i\}$, and arrays for cluster size and mean $N_{i,k},M_{i,k}$, for $k\in\{1,\dots,K_i\}$.
 
-The initialization is $K_1=1,\, N_{1,1}=1,\, T_{1,1}=y_1,\, M_{1,1}=y_1$, which represent $F_1^\leq$.
+The initialization is to set the number of clusters to one $K_1=1$, set the cluster size to one, $N_{1,1}=1$, and set the cluster mean to the first data point, $M_{1,1}=y_1$.
+This is a representation of the first cost function, $F_1^\leq$.
 
 For each iteration $i\in\{1, \dots, n-1\}$, the dynamic programming recursively computes $F_{i+1}^\leq$, via
 \begin{equation}
@@ -114,7 +117,7 @@ The coefficients of $f_{i,k}$ are computed via a cumulative sum (starting at $k=
   \hat T_{i, k} &=& 
   \begin{cases}
     y_{i+1} & \text{ if } k=K_i+1.\\
-    \hat T_{i, k+1} + T_{i,k} = y_{i+1}+\sum_{j=k}^{K_i} T_{i,j} & \text{ if } k\in\{K_i,\dots,1\}.
+    \hat T_{i, k+1} + N_{i,k} M_{i,k} = y_{i+1}+\sum_{j=k}^{K_i} N_{i,j} M_{i,j} & \text{ if } k\in\{K_i,\dots,1\}.
   \end{cases}
 \end{eqnarray}
 At step $i+1$, the new array values are
@@ -124,12 +127,6 @@ At step $i+1$, the new array values are
   \begin{cases}
     N_{i,k} & \text{ for } k\in\{1,\dots,K_{i+1}-1\},\\
     \hat N_{i,K_{i+1}} & \text{ for } k=K_{i+1}.
-  \end{cases}  \\
-  \label{eq:Tip1}
-  T_{i+1, k} &=& 
-  \begin{cases}
-    T_{i,k} & \text{ for } k\in\{1,\dots,K_{i+1}-1\},\\
-    \hat T_{i,K_{i+1}} & \text{ for } k=K_{i+1}.
   \end{cases}  \\
   \label{eq:Mip1}
   M_{i+1, k} &=& 
@@ -142,50 +139,32 @@ Note that values for all $k$ except the largest ($k=K_{i+1}$) are the same betwe
 We therefore can avoid allocating new arrays, and simply write the new values in position $K_{i+1}$ of the existing arrays.
 
 \begin{theorem}
-  The recursively computed values $K_n,N_{n,k},T_{n,k},M_{n,k}$ define a function $F_n^\leq$ which is equal to the optimal cost, $C_{n}^\leq$.
+  The recursively computed values $K_n,N_{n,k},M_{n,k}$ define a function $F_n^\leq$ which is equal to the optimal cost, $C_{n}^\leq$.
 \end{theorem}
 \begin{proof}
 TODO
 \end{proof}
 
 \subsection{Pseudocode}
-
-Algorithm~\ref{alg:iso-dp} summarizes the solution method for the simple case without weights ($w_i=1$ for all $i$).
-
 \begin{algorithm}
 \begin{algorithmic}
   \Require data $y_1,\dots, y_n\in\mathbb R$.
-  \State Allocate cluster sizes $N\in\mathbb Z^n$ and totals/means $T,M\in\mathbb R^n$.
-  \State Initialize $K\gets 1$, $N_1\gets 1$, $T_1\gets y_1$, $M_1=y_1$.
-  \For{$i=2$ to $n$}
+  \State Allocate number of clusters $K\gets 0$, cluster sizes $N\in\mathbb Z^n$ and means $M\in\mathbb R^n$.
+  \For{$i=1$ to $n$}
     \State $\texttt{samples} \gets 1$, $\texttt{total} \gets y_i$.
     \While{$K>0$ and $\texttt{total}/\texttt{samples}\leq M_K$}
-      \State $\texttt{samples } += N_K$, $\texttt{total } += T_K$, $K--$.
+      \State $\texttt{samples } += N_K$, $\texttt{total } += N_K M_K$, $K--$.
     \EndWhile
-    \State $K++$, $N_K\gets\texttt{samples}$, $T_K\gets\texttt{total}$, $M_K\gets\texttt{total}/\texttt{samples}$.
+    \State $K++$, $N_K\gets\texttt{samples}$, $M_K\gets\texttt{total}/\texttt{samples}$.
   \EndFor
   \State \Return $K,N,M$
 \end{algorithmic}
   \caption{\label{alg:iso-dp}Functional dynamic programming for isotonic regression}
 \end{algorithm}
 
-Algorithm~\ref{alg:iso-dp} outputs the optimal means in a run-length encoding, for a number of clusters $K\in\{1,\dots,n\}$.
-Algorithm~\ref{alg:iso-decode} can be used to convert into the solution $x$ of problem~(\ref{eq:isotonic-problem}), the $n$-vector with an optimal mean value for each input data point.
-
-\begin{algorithm}
-\begin{algorithmic}
-  \Require output of Algorithm~\ref{alg:iso-dp}: number of clusters $K\in\mathbb Z$, sizes $N\in\mathbb Z^n$, means $M\in\mathbb R^n$.
-  \State Allocate optimal means to output, $x\in\mathbb R^n$.
-  \State Initialize $i\gets n$.
-  \For{$k=K$ to $1$}
-    \For{$j=1$ to $N_k$}
-    \State $x_i \gets M_k$, $i--$.
-    \EndFor
-  \EndFor
-  \State \Return $x$
-\end{algorithmic}
-  \caption{\label{alg:iso-decode}Decoding optimal isotonic regression parameters}
-\end{algorithm}
+Algorithm~\ref{alg:iso-dp} summarizes the solution method for the simple case without weights ($w_i=1$ for all $i$).
+It outputs the optimal means $M$ along with cluster sizes $N$, which is a run-length encoding of the solution, for a number of clusters $K\in\{1,\dots,n\}$.
+To convert into the $n$-dimensional real-valued solution (an optimal mean value for each input data point), first set all $N$ values after index $K$ to zero, then $x\gets \texttt{rep}(M,N)$ (R code for repeating each $M_k$ value $N_k$ times).
 
 \subsection{Comparison with PAVA}
 TODO
