@@ -35,6 +35,18 @@ TODO estimate empirical complexity with atime.
 - https://arxiv.org/html/2607.12629v1#bib.bib11
 - https://www.inf.fu-berlin.de/lehre/WS12/HA/isotonicregression.pdf
 
+** 26 Aug 2026
+
+[[file:figure-isoreg-dp-atime-data.R]] makes [[file:figure-isoreg-dp-atime-data.rds]]
+
+[[file:figure-isoreg-dp-atime.R]] makes
+
+[[file:figure-isoreg-dp-atime.png]]
+
+[[file:figure-isoreg-dp-atime-ref.png]]
+
+[[file:figure-isoreg-dp-atime-pred.png]]
+
 ** 19 Aug 2026
 
 [[file:figure-isoreg.R]] makes
