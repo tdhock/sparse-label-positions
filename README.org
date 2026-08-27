@@ -16,10 +16,11 @@ The goal of this repo is to study a more efficient algorithm for a label positio
 | R      | R       | SAGx::pava.fdr()           | 2005–2006* |       |      |         |        |
 | R      | R       | smacof::pavasmacof()       | 2008–2024  |       |      |         |        |
 | R      | R       | isotone::gpava()           | 2009–2023  |       |      | yes     |        |
-| R      | Fortran | quadprog::solve.QP()       | 1999–2019  |  N^2  | N^3  | yes     | yes    |
+| R      | Fortran | quadprog::solve.QP()       | 1999–2019  | N^2   | N^3  | yes     | yes    |
 | Python | Python  | [[https://scikit-learn.org/stable/modules/generated/sklearn.isotonic.IsotonicRegression.html][sklearn IsotonicRegression]] |            |       | N?   | yes     | yes    |
 | Python | C       | [[https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.isotonic_regression.html][scipy isotonic_regression]]  |            |       | N    | yes     | no     |
 | R      | C       | monotone::monotone()       |            |       | N    | yes     |        |
+| R      | C       | [[https://github.com/tdhock/directlabels/pull/65][directlabels::isoreg_dp()]]  | 2026       | N     | N    | no      | no     |
 
 Most dates above come from [[https://tdhock.github.io/blog/2026/cran-dates/][this blog]].
 
