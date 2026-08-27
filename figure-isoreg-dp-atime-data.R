@@ -11,6 +11,7 @@ isofuns <- list(
     fun(target-l.vec)+l.vec
   }))
 ares <- atime::atime(
+  N=10^seq(0, 7, by=0.2),
   setup={
     set.seed(1)
     target <- sort(runif(N, 0, 2*N))
