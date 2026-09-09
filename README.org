@@ -9,12 +9,12 @@ The goal of this repo is to study a more efficient algorithm for a label positio
 | R      | C       | fdrtool::monoreg()         | 2006–2021  |       |      |         |        |
 | R      | R       | cir::pava()                | 2008–2024  |       |      |         |        |
 | R      | Fortran | Iso::pava()                | 2008–2020  |       |      | yes     | no     |
-| R      | R       | clue::pava()               | 2004–2026  |       |      |         |        |
+| R      | R       | clue:::pava()              | 2004–2026  |       |      |         |        |
 | R      | R       | logcondens::isoMeans()     | 2006–2023  |       |      |         |        |
-| R      | R       | sandwich::pava.blocks()    | 2004–2026  |       |      |         |        |
-| R      | C       | intcox::intcox.pavaC()     | 2006–2013* |       |      |         |        |
+| R      | R       | sandwich:::pava.blocks()   | 2004–2026  |       |      |         |        |
+| R      | C       | intcox:::intcox.pavaC()    | 2006–2013* |       |      |         |        |
 | R      | R       | SAGx::pava.fdr()           | 2005–2006* |       |      |         |        |
-| R      | R       | smacof::pavasmacof()       | 2008–2024  |       |      |         |        |
+| R      | R       | smacof:::pavasmacof()      | 2008–2024  |       |      |         |        |
 | R      | R       | isotone::gpava()           | 2009–2023  |       |      | yes     |        |
 | R      | Fortran | quadprog::solve.QP()       | 1999–2019  | N^2   | N^3  | yes     | yes    |
 | Python | Python  | [[https://scikit-learn.org/stable/modules/generated/sklearn.isotonic.IsotonicRegression.html][sklearn IsotonicRegression]] |            |       | N?   | yes     | yes    |
